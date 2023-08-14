@@ -1,0 +1,36 @@
+{
+    "name": "dynamic-consistency-boundary/illuminate-event-repository",
+    "require": {
+        "php": "^8.2",
+        "dynamic-consistency-boundary/eventstore": "@dev",
+        "illuminate/database": "^10.17",
+        "eventsauce/backoff": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "DynamicConsistencyBoundary\\IlluminateEventRepository\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DynamicConsistencyBoundary\\IlluminateEventRepository\\Tests\\": "tests/",
+            "DynamicConsistencyBoundary\\EventStore\\Tests\\": "vendor/dynamic-consistency-boundary/eventstore/tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Robertbaelde",
+            "email": "robert_baelde@hotmail.com"
+        }
+    ],
+    "repositories": [{
+        "type": "path",
+        "url": "../eventstore",
+        "options": {
+            "symlink": true
+        }
+    }]
+}

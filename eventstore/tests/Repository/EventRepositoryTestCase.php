@@ -2,6 +2,7 @@
 
 namespace DynamicConsistencyBoundary\EventStore\Tests\Repository;
 
+use DynamicConsistencyBoundary\EventStore\EventQuery\EventOfTypeWithAllTags;
 use DynamicConsistencyBoundary\EventStore\EventStore;
 use PHPUnit\Framework\TestCase;
 use DynamicConsistencyBoundary\EventStore\EventQuery\EventOfTypeWithTags;
@@ -15,6 +16,38 @@ use DynamicConsistencyBoundary\EventStore\Tests\Stub\StudentSubscribedToCourse;
 
 abstract class EventRepositoryTestCase extends TestCase
 {
+    /** @test */
+    public function it_stores_events()
+    {
+        $repository = $this->getRepository();
+        $repository->commitWithoutGuard(new StudentSubscribedToCourse('courseA', 'student1'));
+        $this->assertCount(1, $repository->query(EventQuery::all())->getEvents());
+    }
+
+    /** @test */
+    public function it_returns_only_the_queried_events()
+    {
+        $repository = $this->getRepository();
+        $repository->commitWithoutGuard(
+            new StudentSubscribedToCourse('courseA', 'student1'),
+            new CourseCapacityChanged('courseA', 10)
+        );
+
+        $this->assertCount(1, $repository->query(new EventQuery(
+            new EventOfTypeWithAllTags(
+                StudentSubscribedToCourse::class,
+                new Tags(new Tag('course', 'courseA'), new Tag('student', 'student1')))
+        ))->getEvents());
+
+        $this->assertCount(0, $repository->query(new EventQuery(
+            new EventOfTypeWithAllTags(
+                StudentSubscribedToCourse::class,
+                new Tags(new Tag('course', 'courseB'), new Tag('student', 'student1')))
+        ))->getEvents());
+
+    }
+
+
     /** @test */
     public function it_stores_the_next_events_when_no_new_events_recorded_in_the_meanwhile(): void
     {

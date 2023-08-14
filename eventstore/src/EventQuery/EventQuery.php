@@ -18,6 +18,11 @@ final readonly class EventQuery
         $this->queries = $queries;
     }
 
+    public static function all(): self
+    {
+        return new self(new AllQuery());
+    }
+
     public function mergeWith(EventQuery $eventQuery): EventQuery
     {
         // todo: add deduplication

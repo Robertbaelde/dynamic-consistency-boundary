@@ -1,0 +1,5 @@
+/.idea
+/.gitattributes
+/.phpunit.result.cache
+/composer.lock
+/vendor

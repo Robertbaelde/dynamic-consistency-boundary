@@ -2,7 +2,7 @@
 
 namespace DynamicConsistencyBoundary\EventStore\Events\Serialisation;
 
-use PHPUnit\Event\Event;
+use DynamicConsistencyBoundary\EventStore\Events\Event;
 use DynamicConsistencyBoundary\EventStore\Events\StorableEvent;
 
 final readonly class DefaultEventSerializer implements EventSerializer

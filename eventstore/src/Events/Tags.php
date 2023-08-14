@@ -68,4 +68,22 @@ final readonly class Tags
         return true;
     }
 
+    public function toPayload(): array
+    {
+        return array_map(fn(Tag $tag) => $tag->toPayload(), $this->tags);
+    }
+
+    public static function fromPayload(array $payload): self
+    {
+        return new self(...array_map(fn(array $tag) => Tag::fromPayload($tag), $payload));
+    }
+
+    /**
+     * @return Tag[]
+     */
+    public function all(): array
+    {
+        return $this->tags;
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace DynamicConsistencyBoundary\EventStore\Tests\Repository;
 
+use DynamicConsistencyBoundary\EventStore\EventQuery\AllQuery;
 use DynamicConsistencyBoundary\EventStore\EventQuery\EventQuery;
 use DynamicConsistencyBoundary\EventStore\EventRecorder;
 use DynamicConsistencyBoundary\EventStore\Events\Event;
@@ -19,6 +20,13 @@ final class InMemoryEventRepository implements EventRepositoryInterface
 
     public function query(EventQuery $eventQuery): EventQueryResult
     {
+        if(count($eventQuery->queries) === 1 && $eventQuery->queries[0] instanceof AllQuery){
+            return new EventQueryResult(
+                new NullOptimisticLock(),
+                ...$this->events
+            );
+        }
+
         $events = array_filter($this->events, function (Event $event) use ($eventQuery) {
             foreach($eventQuery->queries as $query){
                 if($query->matches($event)){
